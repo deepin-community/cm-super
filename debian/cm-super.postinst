@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -e
+
+# Extract the .pfb files
+case "$1" in
+    configure)
+    	cd /usr/share/texmf/fonts/type1/public/cm-super
+	tempfile=`mktemp -p /tmp cm-super.checkrun.XXXXXXXX`
+	echo -n "Creating fonts. This may take some time..."
+	set +e
+	t1c2pfb </usr/share/cm-super/cm-super.t1c > $tempfile 2>&1
+	if [ $? = 0 ] ; then
+	  rm -f $tempfile
+	  : > /usr/share/cm-super/cm-super.t1c
+	  echo " done."
+	else
+          echo
+          echo "Font generation failed. Output has been stored in"
+          echo "$tempfile"
+          echo "Please include this file if you report a bug."
+          echo
+        fi
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+
+#DEBHELPER#
+
+exit 0

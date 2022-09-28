@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+if [ $# -eq 2 ]  && ( [ "$1" = "install" ] || [ "$1" = "upgrade" ] ); then
+    if [ "$2" = 0.3.3-4 ]; then
+        # Don't care for changes in the X11R7 cm-super-x11.scale
+        rm -f /etc/X11/fonts/X11R7/Type1/cm-super-x11.scale
+    fi
+fi
+
+#DEBHELPER#
+
+exit 0
